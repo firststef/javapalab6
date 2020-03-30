@@ -75,18 +75,26 @@ public class DrawingPanel extends JPanel {
     private void drawLast(){
         DrownShape shape=shapes.get(shapes.size()-1);
         graphics.setColor(shape.color);
-        graphics.fill(shape.shape);
+        if (shape.shape instanceof Circle){
+            graphics.fillOval(((Circle) shape.shape).x, ((Circle) shape.shape).y,2*((Circle) shape.shape).radius, 2*((Circle) shape.shape).radius);
+        }
+        else
+            graphics.fill(shape.shape);
     }
     void drawAll(){
         reset();
         for (DrownShape d : shapes){
             graphics.setColor(d.color);
-            graphics.fill(d.shape);
+            if (d.shape instanceof Circle){
+                graphics.fillOval(((Circle) d.shape).x, ((Circle) d.shape).y,2*((Circle) d.shape).radius, 2*((Circle) d.shape).radius);
+            }
+            else
+                graphics.fill(d.shape);
         }
     }
 
     private void drawCircle(Color color, int x, int y, int radius){
-        DrownShape shape=new DrownShape(null, color);
+        DrownShape shape=new DrownShape((Shape) new Circle(x,y,radius), color);
         shapes.add(shape);
     }
     private void drawStar(Color color, int x, int y, int radius){
