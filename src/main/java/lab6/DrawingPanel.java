@@ -22,7 +22,7 @@ public class DrawingPanel extends JPanel {
         createOffScreenImage();
         init();
     }
-    void createOffScreenImage(){
+    private void createOffScreenImage(){
         image = new BufferedImage(W, H, BufferedImage.TYPE_INT_ARGB);
         graphics = image.createGraphics();
         graphics.setColor(Color.WHITE);
@@ -39,15 +39,43 @@ public class DrawingPanel extends JPanel {
             }
         });
     }
-    private void drawShape(int x, int y){
-        int radius = (int)this.frame.configPanel.sizeSpinner.getValue();
-        int sides  = (int)this.frame.configPanel.sidesSpinner.getValue();
-        //Color color = (int)this.frame.configPanel.colorB.getValue();
-        Color color = new Color(0x4C37767D, true);
-        graphics.setColor(color);
-        graphics.fill(new RegularPolygon(x,y,radius,sides));
+    private void drawShape(int x, int y) {
+        int radius = (int) ((Integer)frame.configPanel.sizeField.getValue()*10);
+        String shape=frame.configPanel.shapeCombo.getSelectedItem().toString();
+        Random rand = new Random();
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+        Color color = new Color(r, g, b, (float) 0.5);
+        if (shape.compareTo("Circle")==0){
+            drawCircle(color,x,y,radius);
+        }else if (shape.compareTo("Star")==0){
+            drawStar(color, x, y, radius);
+        }else if (shape.compareTo("Random")==0){
+            double random=Math.random();
+            if (random<=0.33)
+                drawCircle(color, x, y, radius);
+            else if (random >=0.66)
+                drawStar(color, x, y, radius);
+            else
+                drawPolygon(color, x, y, radius);
+        }else{
+            drawPolygon(color, x, y, radius);
+        }
     }
-
+    private void drawCircle(Color color, int x, int y, int radius){
+        graphics.setColor(color);
+        graphics.fillOval(x-radius, y-radius, 2*radius, 2*radius);
+    }
+    private void drawStar(Color color, int x, int y, int radius){
+        graphics.setColor(color);
+        graphics.fill(new Star(x, y, radius));
+    }
+    private void drawPolygon(Color color, int x, int y, int radius){
+        int sides = (Integer)frame.configPanel.sidesField.getValue();
+        graphics.setColor(color);
+        graphics.fill(new RegularPolygon(x, y, radius, sides));
+    }
     @Override
     public void update(Graphics f){
 
@@ -56,5 +84,10 @@ public class DrawingPanel extends JPanel {
     protected void paintComponent(Graphics g){
         g.drawImage(image, 0,0, this);
     }
+
+    /**
+     * reapelez functia de desenare a DrawingPanelului
+     */
+    protected void reset(){createOffScreenImage();}
 }
 

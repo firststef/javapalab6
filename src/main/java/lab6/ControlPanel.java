@@ -51,11 +51,12 @@ public class ControlPanel extends JPanel {
         }
     }
     private void reset(ActionEvent e){
-        this.frame.canvas.createOffScreenImage();
+        frame.canvas.reset();
         frame.revalidate();
         frame.repaint();
     }
     private void exit(ActionEvent e){
+        frame.dispose();
         System.exit(0);
     }
 }
