@@ -33,7 +33,12 @@ public class ControlPanel extends JPanel {
     }
     private void save(ActionEvent e){
         try {
-            ImageIO.write(frame.canvas.image, "PNG", new FileOutputStream("test.png"));
+            JFileChooser fileChooser = new JFileChooser(new File("test.png"));
+            fileChooser.showSaveDialog(frame);
+            File filePath=fileChooser.getSelectedFile();
+            if (filePath==null)
+                filePath=new File("test.png");
+            ImageIO.write(frame.canvas.image, "PNG", new FileOutputStream(filePath));
         }
         catch (IOException ex){
             System.err.println(ex);
@@ -41,7 +46,12 @@ public class ControlPanel extends JPanel {
     }
     private void load(ActionEvent e){
         try {
-            this.frame.canvas.image = ImageIO.read(new File("test.png"));
+            JFileChooser fileChooser = new JFileChooser(new File("test.png"));
+            fileChooser.showOpenDialog(frame);
+            File filePath=fileChooser.getSelectedFile();
+            if (filePath==null)
+                filePath=new File("test.png");
+            this.frame.canvas.image = ImageIO.read(filePath);
             frame.canvas.graphics = frame.canvas.image.createGraphics();
             frame.revalidate();
             frame.repaint();
