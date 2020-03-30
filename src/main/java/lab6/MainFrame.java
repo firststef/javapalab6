@@ -13,6 +13,7 @@ public class MainFrame extends JFrame {
     ConfigPanel configPanel;
     ControlPanel controlPanel;
     DrawingPanel canvas;
+    DrownFiguresPanel figuresPanel;
 
     public MainFrame() {
         super("My Drawing Application");
@@ -23,10 +24,12 @@ public class MainFrame extends JFrame {
         configPanel = new ConfigPanel(this, str);
         controlPanel = new ControlPanel(this);
         canvas = new DrawingPanel(this);
+        figuresPanel=new DrownFiguresPanel(this);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(canvas, BorderLayout.CENTER);
         add(configPanel, BorderLayout.NORTH);
         add(controlPanel, BorderLayout.SOUTH);
+        add(figuresPanel, BorderLayout.EAST);
         pack();
     }
 

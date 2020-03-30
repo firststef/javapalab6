@@ -7,12 +7,17 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 public class DrawingPanel extends JPanel {
     final MainFrame frame;
     final static int W = 800, H = 600;
+
+    List<DrownShape> shapes=new ArrayList<>();
+
 
     BufferedImage image;
     Graphics2D graphics;
@@ -39,6 +44,8 @@ public class DrawingPanel extends JPanel {
             }
         });
     }
+
+
     private void drawShape(int x, int y) {
         int radius = (int) ((Integer)frame.configPanel.sizeField.getValue()*10);
         String shape=frame.configPanel.shapeCombo.getSelectedItem().toString();
@@ -62,19 +69,34 @@ public class DrawingPanel extends JPanel {
         }else{
             drawPolygon(color, x, y, radius);
         }
+        drawLast();
+        frame.figuresPanel.addFigure(shapes.get(shapes.size()-1));
     }
+    private void drawLast(){
+        DrownShape shape=shapes.get(shapes.size()-1);
+        graphics.setColor(shape.color);
+        graphics.fill(shape.shape);
+    }
+    void drawAll(){
+        reset();
+        for (DrownShape d : shapes){
+            graphics.setColor(d.color);
+            graphics.fill(d.shape);
+        }
+    }
+
     private void drawCircle(Color color, int x, int y, int radius){
-        graphics.setColor(color);
-        graphics.fillOval(x-radius, y-radius, 2*radius, 2*radius);
+        DrownShape shape=new DrownShape(null, color);
+        shapes.add(shape);
     }
     private void drawStar(Color color, int x, int y, int radius){
-        graphics.setColor(color);
-        graphics.fill(new Star(x, y, radius));
+        DrownShape shape=new DrownShape(new Star(x,y,radius), color);
+        shapes.add(shape);
     }
     private void drawPolygon(Color color, int x, int y, int radius){
         int sides = (Integer)frame.configPanel.sidesField.getValue();
-        graphics.setColor(color);
-        graphics.fill(new RegularPolygon(x, y, radius, sides));
+        DrownShape shape=new DrownShape(new RegularPolygon(x,y,radius, sides), color);
+        shapes.add(shape);
     }
     @Override
     public void update(Graphics f){
